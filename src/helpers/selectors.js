@@ -1,6 +1,6 @@
 //these are called a selector because it accepts state as an argument and returns data derived from that state
 
-export function getAppointmentsForDay(state, day) {
+export default function getAppointmentsForDay(state, day) {
 
   const dayObj = state.days.find(d => d.name === day);
   // console.log(dayObj);
