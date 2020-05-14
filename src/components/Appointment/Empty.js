@@ -1,6 +1,9 @@
 import React from 'react';
 
+import useVisualMode from "../../hooks/useVisualMode";
+
 export default function Empty({ onAdd }) {
+
   return (
     <main className="appointment__add">
       <img
