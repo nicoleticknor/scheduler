@@ -16,6 +16,7 @@ export default function Appointment(props) {
   const SAVING = "SAVING";
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
+  const EDIT = "EDIT";
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
@@ -28,10 +29,9 @@ export default function Appointment(props) {
     back(EMPTY);
   }
 
-  const onCancelDelete = () => {
+  const onCancelEditOrDelete = () => {
     back(SHOW);
   }
-
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -48,12 +48,16 @@ export default function Appointment(props) {
     transition(CONFIRM);
   }
   function deleteInterview() {
-    props.cancelInterview(props.id);
-    transition(DELETING);
 
-    // .then(() => {
-    transition(EMPTY);
-    // })
+    transition(DELETING);
+    props.cancelInterview(props.id)
+      .then(() => {
+        transition(EMPTY);
+      })
+  }
+
+  function editAppt() {
+    transition(EDIT);
   }
 
   return (
@@ -63,7 +67,7 @@ export default function Appointment(props) {
       {mode === CONFIRM && <Confirm
         message="Are you sure you would like to delete?"
         onConfirm={deleteInterview}
-        onCancel={onCancelDelete}
+        onCancel={onCancelEditOrDelete}
       />}
       {mode === SAVING && <Status message="Saving..." />}
       {mode === DELETING && <Status message="Deleting..." />}
@@ -72,6 +76,7 @@ export default function Appointment(props) {
           student={props.interview.student}
           interviewer={props.interview.interviewer}
           onDelete={confirmDelete}
+          onEdit={editAppt}
         />
       )}
       {mode === CREATE &&
@@ -80,6 +85,14 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           val={null}
           onCancel={onCancel}
+          onSave={save}
+        />}
+      {mode === EDIT &&
+        <Form
+          student={props.interview.student}
+          interviewers={props.interviewers}
+          val={props.interview.interviewer.id}
+          onCancel={onCancelEditOrDelete}
           onSave={save}
         />}
     </article>

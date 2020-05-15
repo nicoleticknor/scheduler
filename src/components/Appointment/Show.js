@@ -13,7 +13,7 @@ export default function Show({ student, interviewer, onEdit, onDelete }) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <img
-            onClick={onEdit}
+            onClick={() => { onEdit() }}
             className="appointment__actions-button"
             src="images/edit.png"
             alt="Edit"
