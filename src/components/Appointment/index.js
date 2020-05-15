@@ -6,6 +6,7 @@ import Empty from "components/Appointment/Empty";
 import Form from "components/Appointment/Form";
 import Status from "components/Appointment/Status";
 import Confirm from "components/Appointment/Confirm";
+import Error from "components/Appointment/Error";
 import useVisualMode from "../../hooks/useVisualMode";
 
 export default function Appointment(props) {
@@ -15,6 +16,8 @@ export default function Appointment(props) {
   const CREATE = "CREATE";
   const SAVING = "SAVING";
   const DELETING = "DELETING";
+  const ERROR_DELETE = "ERROR_DELETE";
+  const ERROR_SAVE = "ERROR_SAVE";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
   const { mode, transition, back } = useVisualMode(
@@ -25,12 +28,12 @@ export default function Appointment(props) {
     transition(CREATE);
   }
 
-  const onCancel = () => {
-    back(EMPTY);
+  const onCancelCreate = () => {
+    back();
   }
 
   const onCancelEditOrDelete = () => {
-    back(SHOW);
+    back();
   }
   function save(name, interviewer) {
     const interview = {
@@ -42,18 +45,28 @@ export default function Appointment(props) {
       .then(() => {
         transition(SHOW);
       })
+      .catch(() => {
+        transition(ERROR_SAVE, true);
+      })
   }
 
   function confirmDelete() {
     transition(CONFIRM);
   }
-  function deleteInterview() {
 
-    transition(DELETING);
+  function deleteInterview() {
+    transition(DELETING, true);
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
       })
+      .catch(() => {
+        transition(ERROR_DELETE, true);
+      })
+  }
+
+  function onClose() {
+    back()
   }
 
   function editAppt() {
@@ -71,6 +84,14 @@ export default function Appointment(props) {
       />}
       {mode === SAVING && <Status message="Saving..." />}
       {mode === DELETING && <Status message="Deleting..." />}
+      {mode === ERROR_SAVE && <Error
+        message="Cannot save appointment."
+        onClose={onClose}
+      />}
+      {mode === ERROR_DELETE && <Error
+        message="Cannot delete appointment."
+        onClose={onClose}
+      />}
       {mode === SHOW && (
         <Show
           student={props.interview.student}
@@ -84,7 +105,7 @@ export default function Appointment(props) {
           student={''}
           interviewers={props.interviewers}
           val={null}
-          onCancel={onCancel}
+          onCancel={onCancelCreate}
           onSave={save}
         />}
       {mode === EDIT &&
