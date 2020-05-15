@@ -33,12 +33,12 @@ export default function Form({ student, interviewers, val, onSave, onCancel }) {
           */
           />
         </form>
-        <InterviewerList interviewers={interviewers} value={val} onChange={(value) => { setValue(value) }} />
+        <InterviewerList interviewers={interviewers} value={value} onChange={(value) => { setValue(value) }} />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button onClick={cancel} danger>Cancel</Button>
-          <Button onClick={onSave} confirm>Save</Button>
+          <Button onClick={() => { onSave(name, value) }} confirm>Save</Button>
         </section>
       </section>
     </main>
