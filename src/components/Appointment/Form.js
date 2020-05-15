@@ -16,7 +16,6 @@ export default function Form({ student, interviewers, val, onSave, onCancel }) {
     reset();
     onCancel();
   }
-
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">

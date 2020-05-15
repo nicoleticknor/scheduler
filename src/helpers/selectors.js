@@ -2,6 +2,7 @@
 
 function getAppointmentsForDay(state, day) {
   const dayObj = state.days.find(d => d.name === day);
+
   //some validation for if the day has no appointments
   if (dayObj === undefined) {
     return [];
@@ -14,6 +15,7 @@ function getAppointmentsForDay(state, day) {
     }
     return acc;
   }, []);
+
   return appts;
 }
 
@@ -27,7 +29,27 @@ function getInterview(state, interview) {
   return { "student": interview.student, "interviewer": interviewersAry.find(i => i.id === interviewerId) }
 }
 
+function getInterviewersForDay(state, day) {
+  const dayObj = state.days.find(d => d.name === day);
+
+  if (dayObj === undefined) {
+    return [];
+  }
+
+  const interviewers = dayObj.interviewers.reduce((acc, i) => {
+    for (const item in state.interviewers) {
+      if (i === Number(item)) {
+        acc.push(state.interviewers[item]);
+      }
+    }
+    return acc;
+  }, []);
+
+  return interviewers;
+}
+
 module.exports = {
   getAppointmentsForDay,
-  getInterview
+  getInterview,
+  getInterviewersForDay
 }
