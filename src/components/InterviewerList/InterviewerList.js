@@ -1,6 +1,7 @@
 import React from "react";
 import "components/InterviewerList/InterviewerList.scss";
 import InterviewerListItem from "components/InterviewerListItem/InterviewerListItem";
+import PropTypes from 'prop-types';
 
 export default function DayList({ interviewers, value, onChange }) {
 
