@@ -4,16 +4,22 @@ import axios from 'axios';
 export default function useApplicationData() {
 
   useEffect(() => {
-    const p1 = axios.get('http://localhost:8001/api/days');
-    const p2 = axios.get('http://localhost:8001/api/appointments');
-    const p3 = axios.get('http://localhost:8001/api/interviewers');
-    Promise.all([p1, p2, p3])
-      .then((all) => {
+    async function apiRequest() {
+      try {
+        const p1 = await axios.get('http://localhost:8001/api/days');
+        const p2 = await axios.get('http://localhost:8001/api/appointments');
+        const p3 = await axios.get('http://localhost:8001/api/interviewers');
+
         setState(prev => {
-          return { ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }
+          return { ...prev, days: p1.data, appointments: p2.data, interviewers: p3.data }
         })
-      })
-      .catch(() => axios.get('http://localhost:8001/api/debug/reset'))
+      }
+      catch (err) {
+        axios.get('http://localhost:8001/api/debug/reset')
+      }
+    }
+
+    apiRequest();
   }, []);
 
   const setDay = day => setState({ ...state, day });
@@ -38,12 +44,7 @@ export default function useApplicationData() {
 
     today.spots = spotsRemaining;
 
-    let index;
-    for (let i = 0; i < state.days.length; i++) {
-      if (state.days[i].name === today.name) {
-        index = i;
-      }
-    }
+    const index = state.days.findIndex(d => state.days.name === today.name)
 
     const days = [...state.days];
     days[index] = today;

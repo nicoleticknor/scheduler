@@ -1,5 +1,11 @@
 //these are called a selector because it accepts state as an argument and returns data derived from that state
 
+module.exports = {
+  getAppointmentsForDay,
+  getInterview,
+  getInterviewersForDay
+}
+
 function getAppointmentsForDay(state, day) {
   const dayObj = state.days.find(d => d.name === day);
 
@@ -48,8 +54,4 @@ function getInterviewersForDay(state, day) {
   return interviewers;
 }
 
-module.exports = {
-  getAppointmentsForDay,
-  getInterview,
-  getInterviewersForDay
-}
+
