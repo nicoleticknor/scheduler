@@ -3,10 +3,10 @@ import InterviewerList from "components/InterviewerList/InterviewerList";
 import Button from "components/Button/Button";
 import { checkPropTypes } from "prop-types";
 
-export default function Form({ student, interviewers, val, onSave, onCancel }) {
+export default function Form(props) {
 
-  const [value, setValue] = useState(val || null);
-  const [name, setName] = useState(student || '');
+  const [value, setValue] = useState(props.val || null);
+  const [name, setName] = useState(props.student || '');
   const [error, setError] = useState('');
 
   const reset = () => {
@@ -16,7 +16,7 @@ export default function Form({ student, interviewers, val, onSave, onCancel }) {
 
   const cancel = () => {
     reset();
-    onCancel();
+    props.onCancel();
   }
 
   const validate = () => {
@@ -25,7 +25,7 @@ export default function Form({ student, interviewers, val, onSave, onCancel }) {
       return;
     }
     setError('');
-    onSave(name, value);
+    props.onSave(name, value);
   }
 
   return (
@@ -43,7 +43,7 @@ export default function Form({ student, interviewers, val, onSave, onCancel }) {
           />
           <section className="appointment__validation">{error}</section>
         </form>
-        <InterviewerList interviewers={interviewers} value={value} onChange={(value) => { setValue(value) }} />
+        <InterviewerList interviewers={props.interviewers} value={value} onChange={(value) => { setValue(value) }} />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">

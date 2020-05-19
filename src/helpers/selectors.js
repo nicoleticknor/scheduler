@@ -3,7 +3,9 @@
 module.exports = {
   getAppointmentsForDay,
   getInterview,
-  getInterviewersForDay
+  getInterviewersForDay,
+  changeAppointmentsState,
+  changeDayState
 }
 
 function getAppointmentsForDay(state, day) {
@@ -55,3 +57,32 @@ function getInterviewersForDay(state, day) {
 }
 
 
+//to be updated as selectors when Refactoring useApplicationData
+function changeDayState(appointments, state) {
+  const today = state.days.find(d => d.name === state.day);
+  const spotsRemaining = today.appointments.reduce((acc, d) => {
+    if (!appointments[d].interview) {
+      acc++;
+    }
+    return acc;
+  }, 0);
+
+  today.spots = spotsRemaining;
+  const index = state.days.findIndex(d => state.days.name === today.name)
+  const days = [...state.days];
+  days[index] = today;
+
+  return days;
+}
+
+//to be updated as selectors when Refactoring useApplicationData
+function changeAppointmentsState(id, interview, state) {
+  const appointment = {
+    ...state.appointments[id],
+    interview: interview
+  };
+  return {
+    ...state.appointments,
+    [id]: appointment
+  };
+}

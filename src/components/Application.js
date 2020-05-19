@@ -6,7 +6,7 @@ import DayList from "components/DayList/DayList";
 import Appointment from "components/Appointment/index";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors"
 
-export default function Application(props) {
+export default function Application() {
 
   const {
     state,
@@ -44,7 +44,7 @@ export default function Application(props) {
           <DayList
             days={state.days}
             day={state.day}
-            handleSetDay={setDay}
+            setDay={setDay}
           />
         </nav>
         <img
