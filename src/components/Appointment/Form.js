@@ -24,6 +24,7 @@ export default function Form({ student, interviewers, val, onSave, onCancel }) {
       setError("Student name cannot be blank")
       return;
     }
+    setError('');
     onSave(name, value);
   }
 
