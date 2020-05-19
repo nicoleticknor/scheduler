@@ -11,6 +11,7 @@ import useVisualMode from "../../hooks/useVisualMode";
 
 export default function Appointment(props) {
 
+  //declare component modes, import hook and apply mode based on state
   const SHOW = "SHOW";
   const EMPTY = "EMPTY";
   const CREATE = "CREATE";
@@ -20,28 +21,15 @@ export default function Appointment(props) {
   const ERROR_SAVE = "ERROR_SAVE";
   const DELETING = "DELETING";
   const ERROR_DELETE = "ERROR_DELETE";
+  const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
 
-  const { mode, transition, back } = useVisualMode(
-    props.interview ? SHOW : EMPTY
-  );
+  //click handlers
+  const onAdd = () => transition(CREATE);
+  const onEdit = () => transition(EDIT);
+  const onDelete = () => transition(CONFIRM);
+  const goBack = () => back();
 
-  const onAdd = () => {
-    transition(CREATE);
-  }
-
-  function editAppt() {
-    transition(EDIT);
-  }
-
-  function confirmDelete() {
-    transition(CONFIRM);
-  }
-
-  const goBack = () => {
-    back();
-  }
-
-  async function save(name, interviewer) {
+  async function onSave(name, interviewer) {
     try {
       const interview = {
         student: name,
@@ -56,7 +44,7 @@ export default function Appointment(props) {
     }
   }
 
-  async function deleteInterview() {
+  async function onConfirmDelete() {
     try {
       transition(DELETING, true);
       await props.cancelInterview(props.id);
@@ -67,13 +55,14 @@ export default function Appointment(props) {
     }
   }
 
+  //rendering return
   return (
     <article className="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={onAdd} />}
       {mode === CONFIRM && <Confirm
         message="Are you sure you would like to delete?"
-        onConfirm={deleteInterview}
+        onConfirm={onConfirmDelete}
         onCancel={goBack}
       />}
       {mode === SAVING && <Status message="Saving..." />}
@@ -90,8 +79,8 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
-          onDelete={confirmDelete}
-          onEdit={editAppt}
+          onDelete={onDelete}
+          onEdit={onEdit}
         />
       )}
       {mode === CREATE &&
@@ -100,7 +89,7 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           val={null}
           onCancel={goBack}
-          onSave={save}
+          onSave={onSave}
         />}
       {mode === EDIT &&
         <Form
@@ -108,7 +97,7 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           val={props.interview.interviewer.id}
           onCancel={goBack}
-          onSave={save}
+          onSave={onSave}
         />}
     </article>
   );

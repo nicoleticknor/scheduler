@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import useApplicationData from "../hooks/useApplicationData"
 
 import "components/Application.scss";
@@ -8,6 +8,7 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 
 export default function Application() {
 
+  //import state from hook
   const {
     state,
     setDay,
@@ -15,9 +16,9 @@ export default function Application() {
     cancelInterview
   } = useApplicationData();
 
+  //calculate and format schedule for selected day
   const apptsForDay = getAppointmentsForDay(state, state.day);
   const interviewersForDay = getInterviewersForDay(state, state.day);
-
   const schedule = apptsForDay.map(appt => {
     const interview = getInterview(state, appt.interview);
     return <Appointment
@@ -31,6 +32,7 @@ export default function Application() {
     />;
   })
 
+  //rendering return
   return (
     <main className="layout">
       <section className="sidebar">

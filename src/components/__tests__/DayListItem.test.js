@@ -10,9 +10,9 @@ it("renders without crashing", () => {
   render(<DayListItem />);
 });
 
-it("renders 'no spots remaining' when there are 0 spots", () => {
+it("renders '0 spots remaining' when there are 0 spots", () => {
   const { getByText } = render(<DayListItem name="Monday" spots={0} />);
-  expect(getByText("no spots remaining")).toBeInTheDocument();
+  expect(getByText("0 spots remaining")).toBeInTheDocument();
 });
 
 it("renders '1 spot remaining' when there is 1 spot", () => {

@@ -2,20 +2,26 @@
 
 module.exports = {
   getAppointmentsForDay,
-  getInterview,
   getInterviewersForDay,
+  getInterview,
   changeAppointmentsState,
   changeDayState
 }
 
-function getAppointmentsForDay(state, day) {
-  const dayObj = state.days.find(d => d.name === day);
+//local helper
+function getToday(state, day) {
+  return state.days.find(d => d.name === day);
+}
 
-  //some validation for if the day has no appointments
-  if (dayObj === undefined) {
-    return [];
-  }
-  const appts = dayObj.appointments.reduce((acc, a) => {
+function getAppointmentsForDay(state, day) {
+
+  const today = getToday(state, day);
+
+  //to allow .map on days with no appointments
+  if (!today) return [];
+
+  //select only appointments for today
+  const todaysAppts = today.appointments.reduce((acc, a) => {
     for (const item in state.appointments) {
       if (a === Number(item)) {
         acc.push(state.appointments[item]);
@@ -23,28 +29,17 @@ function getAppointmentsForDay(state, day) {
     }
     return acc;
   }, []);
-
-  return appts;
-}
-
-function getInterview(state, interview) {
-
-  if (!interview) return null;
-
-  const interviewerId = interview.interviewer;
-  const interviewersAry = Object.values(state.interviewers)
-
-  return { "student": interview.student, "interviewer": interviewersAry.find(i => i.id === interviewerId) }
+  return todaysAppts;
 }
 
 function getInterviewersForDay(state, day) {
-  const dayObj = state.days.find(d => d.name === day);
 
-  if (dayObj === undefined) {
-    return [];
-  }
+  const today = getToday(state, day);
 
-  const interviewers = dayObj.interviewers.reduce((acc, i) => {
+  //to allow .map on days with no interviewers
+  if (!today) return [];
+
+  const todaysInterviewers = today.interviewers.reduce((acc, i) => {
     for (const item in state.interviewers) {
       if (i === Number(item)) {
         acc.push(state.interviewers[item]);
@@ -53,34 +48,44 @@ function getInterviewersForDay(state, day) {
     return acc;
   }, []);
 
-  return interviewers;
+  return todaysInterviewers;
 }
 
+function getInterview(state, interview) {
 
-//to be updated as selectors when Refactoring useApplicationData
+  if (!interview) return null;
+
+  const interviewersAry = Object.values(state.interviewers)
+  return { "student": interview.student, "interviewer": interviewersAry.find(i => i.id === interview.interviewer) }
+}
+
 function changeDayState(appointments, state) {
-  const today = state.days.find(d => d.name === state.day);
+
+  const today = getToday(state, state.day);
+  const days = [...state.days];
+  //find today's index in state
+  const index = state.days.findIndex(d => state.days.name === today.name)
+
+  //calculate remaining spots for today
   const spotsRemaining = today.appointments.reduce((acc, d) => {
-    if (!appointments[d].interview) {
-      acc++;
-    }
+    if (!appointments[d].interview) acc++
     return acc;
   }, 0);
 
+  //update spots in state at toda's index only
   today.spots = spotsRemaining;
-  const index = state.days.findIndex(d => state.days.name === today.name)
-  const days = [...state.days];
   days[index] = today;
 
   return days;
 }
 
-//to be updated as selectors when Refactoring useApplicationData
 function changeAppointmentsState(id, interview, state) {
+
   const appointment = {
     ...state.appointments[id],
     interview: interview
   };
+
   return {
     ...state.appointments,
     [id]: appointment

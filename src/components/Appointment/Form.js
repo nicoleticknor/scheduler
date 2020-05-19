@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import InterviewerList from "components/InterviewerList/InterviewerList";
 import Button from "components/Button/Button";
-import { checkPropTypes } from "prop-types";
 
 export default function Form(props) {
 
@@ -9,6 +8,7 @@ export default function Form(props) {
   const [name, setName] = useState(props.student || '');
   const [error, setError] = useState('');
 
+  //click handlers
   const reset = () => {
     setName('');
     setValue(null);
@@ -20,10 +20,7 @@ export default function Form(props) {
   }
 
   const validate = () => {
-    if (name === '') {
-      setError("Student name cannot be blank")
-      return;
-    }
+    if (name === '') return setError("Student name cannot be blank");
     setError('');
     props.onSave(name, value);
   }
