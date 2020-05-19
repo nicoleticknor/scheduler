@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {
-  changeAppointmentsState,
-  changeDayState
-} from '../helpers/selectors'
+import { useState, useEffect } from 'react';
+import { changeAppointmentsState, changeDayState } from '../helpers/selectors'
 import axios from 'axios';
 
+// TODO better name for bookInterview? save issue
+
 export default function useApplicationData() {
-  //retrieve relevant application data from API
+
+  //retrieve relevant application data from API on load
   useEffect(() => {
 
     async function apiRequest() {
@@ -27,7 +27,7 @@ export default function useApplicationData() {
 
   }, []);
 
-  //set initial State for application
+  //set state
   const setDay = day => setState({ ...state, day });
   const [state, setState] = useState({
     day: 'Monday',
@@ -38,6 +38,7 @@ export default function useApplicationData() {
 
   //needs a better name
   async function bookInterview(id, interview) {
+
     const appointments = changeAppointmentsState(id, { ...interview }, state);
     const days = changeDayState(appointments, state);
 
@@ -54,11 +55,11 @@ export default function useApplicationData() {
   }
 
   async function cancelInterview(id) {
+
     const appointments = changeAppointmentsState(id, null, state);
     const days = changeDayState(appointments, state);
 
     await axios.delete(`http://localhost:8001/api/appointments/${id}`);
-
     return setState(state => {
       return {
         ...state,
@@ -67,5 +68,6 @@ export default function useApplicationData() {
       }
     })
   }
+
   return { state, setDay, bookInterview, cancelInterview }
 }
