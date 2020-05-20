@@ -20,7 +20,8 @@ export default function useApplicationData() {
         })
       }
       catch (err) {
-        axios.get('http://localhost:8001/api/debug/reset');
+        alert(err);
+        console.log(err);
       }
     }
     apiRequest();
