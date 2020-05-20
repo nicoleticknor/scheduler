@@ -52,7 +52,6 @@ function getInterviewersForDay(state, day) {
 }
 
 function getInterview(state, interview) {
-
   if (!interview) return null;
 
   const interviewersAry = Object.values(state.interviewers)

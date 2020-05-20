@@ -57,7 +57,9 @@ export default function Appointment(props) {
 
   //rendering return
   return (
-    <article className="appointment">
+    <article
+      data-testid="appointment"
+      className="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={onAdd} />}
       {mode === CONFIRM && <Confirm
