@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { changeAppointmentsState, changeDayState } from '../helpers/selectors'
 import axios from 'axios';
 
-// TODO better name for bookInterview? save issue
-
 export default function useApplicationData() {
 
   //retrieve relevant application data from API on load
@@ -37,7 +35,6 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
-  //needs a better name
   async function bookInterview(id, interview) {
 
     const appointments = changeAppointmentsState(id, { ...interview }, state);
