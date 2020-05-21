@@ -4,8 +4,13 @@ Interview Scheduler is a full-stack SPA built with React and HTML/CSS on the fro
 
 ## Screenshots
 
+### Landing Page
 !["Landing page with Monday selected"](https://github.com/nicoleticknor/scheduler/blob/master/docs/monday-schedule.png?raw=true)
+
+### Create/Edit Form
 !["Edit Form"](https://github.com/nicoleticknor/scheduler/blob/master/docs/edit-screen.png?raw=true)
+
+### After Saving a New Interview
 !["After Saving - 2 spots remaining"](https://github.com/nicoleticknor/scheduler/blob/master/docs/after-save.png?raw=true)
 
 ## Setup
